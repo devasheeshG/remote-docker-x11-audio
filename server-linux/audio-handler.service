@@ -1,0 +1,13 @@
+[Unit]
+Description=Audio Handler Service
+After=network.target pulseaudio.service
+
+[Service]
+ExecStart=/bin/bash /path/to/audio_handler.sh
+Restart=always
+User=devasheesh
+Group=devasheesh
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+
+[Install]
+WantedBy=multi-user.target
