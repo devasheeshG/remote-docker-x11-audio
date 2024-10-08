@@ -10,9 +10,12 @@ log_message() {
 # Start PulseAudio daemon
 pulseaudio --start
 
-# Create virtual devices
+## Create virtual devices
+# INPUT: virtual_microphone
 pactl load-module module-null-sink sink_name=virtual_speaker
 pactl load-module module-null-sink sink_name=virtual_microphone
+
+
 pactl load-module module-loopback source=virtual_microphone.monitor sink=virtual_speaker
 
 MIC_STREAM_PORT=12345
