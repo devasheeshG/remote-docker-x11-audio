@@ -36,7 +36,7 @@ set-default-source input
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y pulseaudio
+sudo apt-get install -y pulseaudio alsa-utils
 ```
 
 2. Create necessary directories
@@ -90,20 +90,78 @@ pactl info
 2. Test audio playback:
 
 ```bash
-paplay /usr/share/sounds/alsa/Front_Left.wav
-paplay /usr/share/sounds/alsa/Front_Center.wav
-paplay /usr/share/sounds/alsa/Front_Right.wav
+# Default audio test
+speaker-test -c 2 -t wav
+
+# Play a test audio file
+aplay -D pulse test_audio.wav
+```
+
+3. Test audio recording:
+
+```bash
+# Default audio recording
+arecord -f cd -t wav -d 5 output.wav
+aplay -D pulse output.wav
+
+
+# Record audio from the default microphone using pyaudio
+python3 pyaudio_test_microphone.py
+aplay -D pulse output.wav
 ```
 
 ### Troubleshooting
 
-[Stackoverflow - Use pulseaudio inside docker container](https://stackoverflow.com/questions/64037579/running-pulseaudio-inside-docker-container-to-record-system-audio)
+- [Stackoverflow - Use pulseaudio inside docker container](https://stackoverflow.com/questions/64037579/running-pulseaudio-inside-docker-container-to-record-system-audio)
+- Use Google.
 
 ## X11 Forwarding (GUI)
 
-### Windows Client Setup
-
-### Mac Client Setup
-
 ### Docker Container Setup
 
+1. Ensure SSH is installed and running in your Docker container:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y openssh-server
+sudo service ssh start
+
+# Set `PermitRootLogin yes` in /etc/ssh/sshd_config if you want to SSH as root
+```
+
+2. Edit `/etc/ssh/sshd_config` to include:
+
+```bash
+X11Forwarding yes
+X11UseLocalhost no
+```
+
+3. Restart the SSH service:
+
+```bash
+# For systemctl based systems
+sudo systemctl restart ssh
+
+# For systems using service
+sudo service ssh restart
+```
+
+4. Install X11 and GUI applications in your Docker container:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y xauth x11-apps
+```
+
+### Windows Client Setup
+
+1. Install an SSH client like [PuTTY](https://www.putty.org/).
+2. Install an X11 server like [Xming](https://sourceforge.net/projects/xming/).
+3. Open PuTTY and navigate to `Connection > SSH > X11`.
+4. Check `Enable X11 forwarding`.
+5. Navigate back to `Session`, enter the hostname and port of your server, and click `Open`.
+6. Install Xming and run it.
+7. Open PuTTY and SSH into your server.
+8. Run a GUI application like `xeyes` or `gedit`.
+
+### Mac Client Setup
