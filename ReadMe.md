@@ -155,7 +155,7 @@ sudo apt-get install -y xauth x11-apps
 
 ### Windows Client Setup
 
-1. Install an SSH client like [PuTTY](https://www.putty.org/).
+1. Install an SSH client like [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/).
 2. Install an X11 server like [Xming](https://sourceforge.net/projects/xming/).
 3. Open PuTTY and navigate to `Connection > SSH > X11`.
 4. Check `Enable X11 forwarding`.
